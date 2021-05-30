@@ -2,7 +2,9 @@ package backend.reasoning
 
 
 import backend.knowledge.Ontology
+import backend.models.Concept
 import backend.models.WeightedSymptom
+import backend.util.toHumanReadable
 
 
 class Logic {
@@ -44,6 +46,18 @@ class Logic {
                     .map { a -> a.get("disease").asResource().localName }
                     .toSet()
                     .toList()
+            }
+        }
+
+        fun signsAndSymptoms(): List<Concept> {
+            val query = Queries.getAllSignsAndSymptoms()
+            return Runner.run(Ontology.model, query) {
+                it.iterator().asSequence().map { item ->
+                    val id = item.get("signOrSymptom").asResource().localName
+                    val comment = item.get("description").asLiteral().string
+                    val display = id.split("-").last().toHumanReadable()
+                    Concept(id, display, comment)
+                }.toList()
             }
         }
     }

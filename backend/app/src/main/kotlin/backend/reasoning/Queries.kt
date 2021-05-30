@@ -2,6 +2,7 @@ package backend.reasoning
 
 import org.apache.jena.query.Query
 import org.apache.jena.query.QueryFactory
+import org.apache.jena.query.ResultSetFormatter
 import org.apache.jena.vocabulary.OWL
 import org.apache.jena.vocabulary.RDF
 import org.apache.jena.vocabulary.RDFS
@@ -37,6 +38,19 @@ class Queries {
                         ?disease rdfs:subClassOf* cpo:Disease .
                  } 
                  GROUP BY ?signOrSymptom
+                 """
+            )
+        }
+
+        fun getAllSignsAndSymptoms(): Query {
+            return QueryFactory.create(
+                """
+                $prefix
+                 
+                 SELECT ?signOrSymptom ?description
+                 WHERE {
+                        ?signOrSymptom rdfs:subClassOf* cpo:SignAndSymptom; rdfs:comment ?description . 
+                 } 
                  """
             )
         }
@@ -99,5 +113,13 @@ class Queries {
             )
         }
     }
+
+
 }
+
+//fun main() {
+//    Runner.run(backend.knowledge.Ontology.model, Queries.getAllSignsAndSymptoms()) {
+//        ResultSetFormatter.out(it);
+//    }
+//}
 

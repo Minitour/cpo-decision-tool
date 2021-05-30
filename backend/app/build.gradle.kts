@@ -20,6 +20,7 @@ repositories {
 }
 
 dependencies {
+    implementation("com.google.code.gson:gson:2.8.7")
     implementation("org.apache.jena:apache-jena-libs:4.0.0")
     implementation("org.apache.jena:jena-querybuilder:4.0.0")
     implementation("io.javalin:javalin:3.13.7")
