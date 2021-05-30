@@ -20,6 +20,8 @@ repositories {
 }
 
 dependencies {
+    implementation("org.apache.jena:apache-jena-libs:4.0.0")
+    implementation("org.apache.jena:jena-querybuilder:4.0.0")
     implementation("io.javalin:javalin:3.13.7")
 
     implementation("org.slf4j:slf4j-simple:2.0.0-alpha1")
