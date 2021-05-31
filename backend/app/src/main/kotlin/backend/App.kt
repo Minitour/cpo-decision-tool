@@ -14,6 +14,7 @@ fun main(args: Array<String>) {
     app.get("/api/interventions", Interventions.Companion.GetAll())
     app.get("/api/conditions/infer", Conditions.Companion.Infer())
 
+    println("Setup done.")
 }
 
 fun getPort(): Int {

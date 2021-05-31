@@ -51,24 +51,25 @@ application {
 val mainClass = "backend.AppKt"
 
 tasks {
-  register("fatJar", Jar::class.java) {
-    archiveClassifier.set("all")
-    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-    manifest {
-      attributes("Main-Class" to mainClass)
+
+    register("fatJar", Jar::class.java) {
+        archiveClassifier.set("all")
+        duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+        manifest {
+            attributes("Main-Class" to mainClass)
+        }
+        from(configurations.runtimeClasspath.get()
+            .onEach { println("add from dependencies: ${it.name}") }
+            .map {
+                if (it.name.endsWith(".jar")) {
+                    zipTree(it)
+                } else {
+                    it
+                }
+            }
+        )
+        val sourcesMain = sourceSets.main.get()
+        sourcesMain.allSource.forEach { println("add from sources: ${it.name}") }
+        from(sourcesMain.output)
     }
-    from(configurations.runtimeClasspath.get()
-        .onEach { println("add from dependencies: ${it.name}") }
-//        .map {
-//            try {
-//                if (it.isDirectory) it else zipTree(it)
-//            } catch (e: Exception) {
-//                it
-//            }
-//        }
-    )
-    val sourcesMain = sourceSets.main.get()
-    sourcesMain.allSource.forEach { println("add from sources: ${it.name}") }
-    from(sourcesMain.output)
-  }
 }
