@@ -5,6 +5,7 @@ import backend.knowledge.Ontology
 import backend.models.Concept
 import backend.models.WeightedSymptom
 import backend.util.toHumanReadable
+import org.apache.jena.query.QuerySolution
 
 
 class Logic {
@@ -38,22 +39,68 @@ class Logic {
             }
         }
 
-        fun diseasesForSymptoms(symptoms: List<String>): List<String> {
-            val query = Queries.getDiseasesForSymptomsQuery(symptoms)
-            return Runner.run(Ontology.model, query) {
+        fun diseasesFromSymptomsAndInterventions(symptoms: List<String>, interventions: List<String>): List<Concept> {
+            val query = Queries.getDiseasesForSymptoms(symptoms)
+
+            fun resultToConcept(item: QuerySolution): Concept {
+                val id = item.get("disease").asResource().localName
+                val comment = item.get("description").asLiteral().string
+                val display = id.split("-").last().toHumanReadable()
+                return Concept(id, display, comment)
+            }
+
+            val list1 = Runner.run(Ontology.model, query) {
                 it.iterator()
                     .asSequence()
-                    .map { a -> a.get("disease").asResource().localName }
+                    .map { item -> resultToConcept(item) }
                     .toSet()
                     .toList()
             }
+            val list2 = Runner.run(Ontology.model, query) {
+                it.iterator()
+                    .asSequence()
+                    .map { item -> resultToConcept(item) }
+                    .toSet()
+                    .toList()
+            }
+
+            return (list1 + list2).distinct()
         }
 
-        fun signsAndSymptoms(): List<Concept> {
-            val query = Queries.getAllSignsAndSymptoms()
+
+        fun signsAndSymptoms(disease: String? = null): List<Concept> {
+
+            val query =
+                if (disease != null) Queries.getSignsAndSymptomsOfDisease(disease) else Queries.getAllSignsAndSymptoms()
             return Runner.run(Ontology.model, query) {
                 it.iterator().asSequence().map { item ->
                     val id = item.get("signOrSymptom").asResource().localName
+                    val comment = item.get("description")?.asLiteral()?.string
+                    val display = id.split("-").last().toHumanReadable()
+                    Concept(id, display, comment)
+                }.toList()
+            }
+        }
+
+
+        fun interventions(disease: String? = null): List<Concept> {
+            val query =
+                if (disease != null) Queries.getInterventionPlansForDisease(disease) else Queries.getAllInterventions()
+            return Runner.run(Ontology.model, query) {
+                it.iterator().asSequence().map { item ->
+                    val id = item.get("intervention").asResource().localName
+                    val comment = item.get("description")?.asLiteral()?.string
+                    val display = id.split("-").last().toHumanReadable()
+                    Concept(id, display, comment)
+                }.toList()
+            }
+        }
+
+        fun diseases(): List<Concept> {
+            val query = Queries.getAllDiseases()
+            return Runner.run(Ontology.model, query) {
+                it.iterator().asSequence().map { item ->
+                    val id = item.get("disease").asResource().localName
                     val comment = item.get("description").asLiteral().string
                     val display = id.split("-").last().toHumanReadable()
                     Concept(id, display, comment)

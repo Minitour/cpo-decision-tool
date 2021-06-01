@@ -16,7 +16,8 @@ fun main(args: Array<String>) {
 
     app.get("/api/symptoms", Symptoms.Companion.GetAll())
     app.get("/api/interventions", Interventions.Companion.GetAll())
-    app.get("/api/conditions/infer", Conditions.Companion.Infer())
+    app.get("/api/conditions", Conditions.Companion.GetAll())
+    app.post("/api/conditions/infer", Conditions.Companion.Infer())
 
     println("Setup done.")
 }
