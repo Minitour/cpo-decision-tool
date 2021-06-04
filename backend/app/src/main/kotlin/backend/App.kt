@@ -12,6 +12,7 @@ fun main(args: Array<String>) {
     org.apache.jena.query.ARQ.init()
     val app = Javalin.create { config ->
         config.addStaticFiles("/public")
+        config.enableCorsForAllOrigins()
     }.start(getPort())
 
     app.get("/api/symptoms", Symptoms.Companion.GetAll())
