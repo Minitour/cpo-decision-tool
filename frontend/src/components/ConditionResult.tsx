@@ -135,7 +135,7 @@ export default function ConditionResult(props: any) {
             <Modal onClose={onClose} size='4xl' isOpen={isOpen} scrollBehavior='inside'>
                 <ModalOverlay />
                 <ModalContent>
-                    <ModalHeader>{getModalTitle(modalMode) + `for ${modalCondition.concept.display}`}</ModalHeader>
+                    <ModalHeader>{getModalTitle(modalMode) + `for ${modalCondition?.concept.display}`}</ModalHeader>
                     <ModalCloseButton />
                     <ModalBody>
                         <Table size="sm">

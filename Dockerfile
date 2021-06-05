@@ -10,6 +10,9 @@ RUN ls
 
 RUN rm -rf node_modules && yarn install --frozen-lockfile
 
+# Delete line from extend theme that causes issues.
+RUN sed -i '37d' ./node_modules/@chakra-ui/react/dist/types/extend-theme.d.ts
+
 RUN yarn build
 
 FROM gradle:7.0.2 as backend-stage
