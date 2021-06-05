@@ -8,7 +8,7 @@ RUN ls
 
 # Alternative to npm ci
 
-RUN rm -rf node_modules && yarn install
+RUN rm -rf node_modules && yarn install --frozen-lockfile
 
 RUN yarn build
 
