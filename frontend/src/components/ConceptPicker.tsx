@@ -5,7 +5,17 @@ import { List, ListItem, PopoverTrigger, PopoverContent, PopoverArrow, PopoverCl
 import { Checkbox } from "@chakra-ui/react"
 import { MdInfoOutline } from "react-icons/md";
 
-export default function ConceptPicker(props: any) {
+
+function areEqual(prevProps: any, nextProps: any): boolean {
+    /*
+    return true if passing nextProps to render would return
+    the same result as passing prevProps to render,
+    otherwise return false
+    */
+    return prevProps.concepts.length == nextProps.concepts.length && prevProps.didSelectionChange == nextProps.didSelectionChange;
+}
+
+function ConceptPicker(props: any) {
 
     if (props.concepts.length == 0) {
         return <div></div>
@@ -13,6 +23,7 @@ export default function ConceptPicker(props: any) {
     const [selected, setSelected] = useState(new Set<string>());
     const [_concepts, _setConcepts] = useState(props.concepts);
     const [filteredConcepts, setFilteredConcepts] = useState(props.concepts);
+    const didSelectionChange = props.didSelectionChange;
 
     const onTextChange = (term: string) => {
         setFilteredConcepts(
@@ -35,6 +46,7 @@ export default function ConceptPicker(props: any) {
             selected.add(key);
         }
         setSelected(new Set<string>(selected));
+        didSelectionChange(selected);
     }
     return (
         <HStack align="stretch" spacing={10}>
@@ -100,3 +112,5 @@ export default function ConceptPicker(props: any) {
 
     )
 }
+
+export default React.memo(ConceptPicker, areEqual);
