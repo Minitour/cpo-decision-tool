@@ -85,8 +85,8 @@ export default function ConditionResult(props: any) {
     }
 
     return (
-        <>
-            <Table size="sm">
+        <div style={{height: 600, overflowY: 'auto'}}>
+            <Table size="sm" >
                 <Thead>
                     <Tr>
                         <Th>Condition</Th>
@@ -135,7 +135,7 @@ export default function ConditionResult(props: any) {
             <Modal onClose={onClose} size='4xl' isOpen={isOpen} scrollBehavior='inside'>
                 <ModalOverlay />
                 <ModalContent>
-                    <ModalHeader>{getModalTitle(modalMode) + `for ${modalCondition?.concept.display}`}</ModalHeader>
+                    <ModalHeader>{getModalTitle(modalMode) + ` for ${modalCondition?.concept.display}`}</ModalHeader>
                     <ModalCloseButton />
                     <ModalBody>
                         <Table size="sm">
@@ -149,7 +149,7 @@ export default function ConditionResult(props: any) {
                             <Tbody>
                                 {getInformation(modalCondition, signsAndSymptoms, interventions, modalMode).map((item) => {
                                     return (
-                                        <Tr backgroundColor={item.isConfirmed ? 'green.100' : 'clear' }>
+                                        <Tr backgroundColor={item.isConfirmed ? 'green.100' : 'clear'}>
                                             <Td><b>{item.concept.display}</b></Td>
                                             <Td>{item.concept.description}</Td>
                                             <Td> {modalMode == 1 ? getIndicationIconForSymptoms(item.isConfirmed) : getIndicationIconForInterventions(item.isConfirmed)} </Td>
@@ -164,6 +164,6 @@ export default function ConditionResult(props: any) {
                     </ModalFooter>
                 </ModalContent>
             </Modal>
-        </>
+        </div>
     )
 }

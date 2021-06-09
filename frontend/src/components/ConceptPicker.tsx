@@ -5,6 +5,74 @@ import { List, ListItem, PopoverTrigger, PopoverContent, PopoverArrow, PopoverCl
 import { Checkbox } from "@chakra-ui/react"
 import { MdInfoOutline } from "react-icons/md";
 
+function ConceptInfoPopover(props: any) {
+    const concept = props.concept;
+    return (
+        <Box p="4">
+            <Popover trigger="hover" variant="responsive" >
+
+                <PopoverTrigger >
+                    <IconButton
+                        variant="outline"
+                        colorScheme="blue"
+                        aria-label="Concept"
+                        icon={<MdInfoOutline />}
+                    />
+                </PopoverTrigger>
+                <PopoverContent>
+                    <PopoverArrow />
+                    <PopoverCloseButton />
+                    <PopoverHeader>{concept.display}</PopoverHeader>
+                    <PopoverBody> {concept.description}</PopoverBody>
+                </PopoverContent>
+            </Popover>
+        </Box>
+    )
+}
+
+function ConceptListPicker(props: any) {
+    const concepts = props.concepts;
+    const selected = props.selected;
+    const onCheck = props.onCheck;
+    return (
+        <List height="100%" overflowY="scroll">
+            {
+                concepts.map((x: Concept) => {
+                    return (
+                        <ListItem key={x.id} >
+                            <Flex>
+                                <Box p="4">
+                                    <Checkbox
+                                        isChecked={selected.has(x.id)}
+                                        onChange={e => onCheck(x.id)}>
+                                        {x.display}
+                                    </Checkbox>
+                                </Box>
+                                <Spacer />
+                                <ConceptInfoPopover concept={x} />
+                            </Flex>
+                        </ListItem>
+                    )
+                })
+            }
+        </List>
+    )
+}
+
+function SelectedConcepts(props: any) {
+    const concepts = props.concepts;
+    return (
+        <Box h="100%">
+            <h2> <b>Selected Concepts</b></h2>
+            <br></br>
+            <UnorderedList style={{ minWidth: '300px', overflowY: "auto", height: '100%' }}>
+                {
+                    concepts.map((x: Concept) => <ListItem key={x.id} style={{ textAlign: 'left' }}>{x.display}</ListItem>)
+                }
+            </UnorderedList>
+        </Box>
+    )
+}
 
 function areEqual(prevProps: any, nextProps: any): boolean {
     /*
@@ -49,65 +117,19 @@ function ConceptPicker(props: any) {
         didSelectionChange(selected);
     }
     return (
-        <HStack align="stretch" spacing={10}>
-            <VStack align="stretch" w="100%">
-                <Box h="100%">
+        <HStack align="stretch" spacing={10} height="600px" marginBottom="10" marginLeft="5" marginRight="5">
+            <VStack align="stretch" w="100%" h="100%">
+                <Box>
                     <SearchView onTextChange={onTextChange}></SearchView>
                 </Box>
-                <Box>
-                    <List style={{ height: '600px', overflowY: 'scroll' }}>
-                        {
-                            filteredConcepts.map((x: Concept) => {
-                                return (
-                                    <ListItem key={x.id} >
-                                        <Flex>
-                                            <Box p="4">
-                                                <Checkbox
-                                                    isChecked={selected.has(x.id)}
-                                                    onChange={e => onCheck(x.id)}>
-                                                    {x.display}
-                                                </Checkbox>
-                                            </Box>
-                                            <Spacer />
-                                            <Box p="4">
-                                                <Popover trigger="hover" variant="responsive">
-                                                    <PopoverTrigger >
-                                                        <IconButton
-                                                            variant="outline"
-                                                            colorScheme="blue"
-                                                            aria-label="Send email"
-                                                            icon={<MdInfoOutline />}
-                                                        />
-                                                    </PopoverTrigger>
-                                                    <PopoverContent>
-                                                        <PopoverArrow />
-                                                        <PopoverCloseButton />
-                                                        <PopoverHeader>{x.display}</PopoverHeader>
-                                                        <PopoverBody>{x.description}</PopoverBody>
-                                                    </PopoverContent>
-                                                </Popover>
-                                            </Box>
-                                        </Flex>
-                                    </ListItem>
-                                )
-                            })
-                        }
-                    </List>
-
+                <Box h="100%">
+                    <ConceptListPicker concepts={filteredConcepts} selected={selected} onCheck={onCheck} />
                 </Box>
             </VStack>
-            <Box>
-                <h2> <b>Selected Concepts</b></h2>
-                <br></br>
-                <UnorderedList style={{ minWidth: '200px' }}>
-                    {
-                        _concepts
-                            .filter((x: Concept) => selected.has(x.id))
-                            .map((x: Concept) => <ListItem key={x.id} style={{ textAlign: 'left' }}>{x.display}</ListItem>)
-                    }
-                </UnorderedList>
-
+            <Box h="100%">
+                <SelectedConcepts concepts={_concepts.filter((x: Concept) => selected.has(x.id))} />
             </Box>
+
         </HStack>
 
     )
