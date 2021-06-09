@@ -19,12 +19,16 @@ class DecisionSupport {
         fun calculateDiseasePercentage(disease: String, signsAndSymptoms: List<String>): Double {
             val diseaseSymptoms = Logic.symptomsForDisease(disease)
 
+            // sum of all symptom scores.
             val totalScore = diseaseSymptoms
                 .asSequence()
                 .map { weightedSymptoms.getOrDefault(it, 0.0) }
                 .sum()
+
+            // sum of confirmed symptoms.
             val confirmedScore = signsAndSymptoms
                 .asSequence()
+                .filter { diseaseSymptoms.contains(it) }
                 .map { weightedSymptoms.getOrDefault(it, 0.0) }
                 .sum()
 

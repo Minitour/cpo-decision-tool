@@ -40,7 +40,8 @@ class Logic {
         }
 
         fun diseasesFromSymptomsAndInterventions(symptoms: List<String>, interventions: List<String>): List<Concept> {
-            val query = Queries.getDiseasesForSymptoms(symptoms)
+            val symptomQuery = Queries.getDiseasesForSymptoms(symptoms)
+            val interventionQuery = Queries.getDiseasesForInterventions(interventions)
 
             fun resultToConcept(item: QuerySolution): Concept {
                 val id = item.get("disease").asResource().localName
@@ -49,14 +50,14 @@ class Logic {
                 return Concept(id, display, comment)
             }
 
-            val list1 = Runner.run(Ontology.model, query) {
+            val list1 = Runner.run(Ontology.model, symptomQuery) {
                 it.iterator()
                     .asSequence()
                     .map { item -> resultToConcept(item) }
                     .toSet()
                     .toList()
             }
-            val list2 = Runner.run(Ontology.model, query) {
+            val list2 = Runner.run(Ontology.model, interventionQuery) {
                 it.iterator()
                     .asSequence()
                     .map { item -> resultToConcept(item) }
