@@ -143,9 +143,15 @@ function App() {
           </div>
         } />
 
-        <Card title="Open Source" description="View the source code on GitHub!" actionTitle="View Repository" actionLink="https://github.com/Minitour/cpo-decision-tool" />
+        <Card title="About"
+          description={`This project is a recreation of the medical decision support tool introduced in the paper "An ontology-based personalization of health-care knowledge to support clinical decisions for chronically ill patients" by Riano et al.`}
+          actionTitle="View Publication"
+          actionLink="https://doi.org/10.1016/j.jbi.2011.12.008" />
 
-        <Card title="About" description="This project is a reaction of the medical decision support tool introduced in the paper about the case profile ontology." actionTitle="View Publication" actionLink="https://doi.org/10.1016/j.jbi.2011.12.008" />
+        <Card title="Open Source"
+          description="View the source code on GitHub!"
+          actionTitle="View Repository"
+          actionLink="https://github.com/Minitour/cpo-decision-tool" />
       </HStack>
 
       <Divider />
