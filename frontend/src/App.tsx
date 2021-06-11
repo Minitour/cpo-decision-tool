@@ -5,11 +5,12 @@ import axios from 'axios';
 import Concept from './models/Concept';
 import ConceptPicker from './components/ConceptPicker';
 import { Accordion, AccordionButton, AccordionIcon, AccordionItem, AccordionPanel } from '@chakra-ui/accordion';
-import { Box, Container } from '@chakra-ui/layout';
+import { Box, Container, Divider, HStack, SimpleGrid, VStack } from '@chakra-ui/layout';
 import Condition from './models/Condition';
 import ConditionResult from './components/ConditionResult';
 import { Button } from '@chakra-ui/button';
 import { Spinner } from '@chakra-ui/spinner';
+import Card from './components/Card';
 
 function getSignsAndSymptoms(): Promise<Concept[]> {
   return axios
@@ -130,7 +131,24 @@ function App() {
   )
 
   return (
-    <div className="App">
+    <div className="App" style={{ textAlign: 'center' }}>
+      <HStack align="center" justify="center" spacing="40" padding="5">
+        <Card title="How to use?" description={
+          <div style={{ textAlign: 'start' }}>
+            1) Select the signs and symptoms
+              <br />
+              2) Select the interventions
+              <br />
+              3) Evaluate all possible conditions
+          </div>
+        } />
+
+        <Card title="Open Source" description="View the source code on GitHub!" actionTitle="View Repository" actionLink="https://github.com/Minitour/cpo-decision-tool" />
+
+        <Card title="About" description="This project is a reaction of the medical decision support tool introduced in the paper about the case profile ontology." actionTitle="View Publication" actionLink="https://doi.org/10.1016/j.jbi.2011.12.008" />
+      </HStack>
+
+      <Divider />
       {
         signsAndSymptoms.length > 0 && interventions.length > 0
           ? mainView
