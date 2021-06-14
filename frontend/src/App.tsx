@@ -146,7 +146,7 @@ function App() {
   )
 
   return (
-    <div className="App" style={{ textAlign: 'center', height: height, overflowY: 'scroll' }}>
+    <div className="App" style={{ textAlign: 'center', height: height, overflowY: 'auto' }}>
       <HStack align="stretch" justify="center" spacing="40" padding="5">
         <Card title="How to use?" description={
           <div style={{ textAlign: 'start' }}>
