@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useLayoutEffect, useState } from 'react'
 import logo from './logo.svg'
 import './App.css'
 import axios from 'axios';
@@ -31,7 +31,22 @@ function inferConditions(symptoms: Array<string>, interventions: Array<string>):
     .then(res => { return res.data; });
 }
 
+function useWindowSize() {
+  const [size, setSize] = useState([0, 0]);
+  useLayoutEffect(() => {
+    function updateSize() {
+      setSize([window.innerWidth, window.innerHeight]);
+    }
+    window.addEventListener('resize', updateSize);
+    updateSize();
+    return () => window.removeEventListener('resize', updateSize);
+  }, []);
+  return size;
+}
+
+
 function App() {
+  const [width, height] = useWindowSize();
   const [count, setCount] = useState(0);
   const [inferLoader, setInferLoader] = useState(false);
   const [signsAndSymptoms, setSignsAndSymptoms] = useState(new Array<Concept>());
@@ -131,8 +146,8 @@ function App() {
   )
 
   return (
-    <div className="App" style={{ textAlign: 'center' }}>
-      <HStack align="center" justify="center" spacing="40" padding="5">
+    <div className="App" style={{ textAlign: 'center', height: height, overflowY: 'scroll' }}>
+      <HStack align="stretch" justify="center" spacing="40" padding="5">
         <Card title="How to use?" description={
           <div style={{ textAlign: 'start' }}>
             1) Select the signs and symptoms
@@ -160,6 +175,7 @@ function App() {
           ? mainView
           : <Spinner thickness="4px" speed="0.65s" emptyColor="gray.200" color="blue.500" size="xl" margin="20" />
       }
+
     </div>
   )
 }
